@@ -46,7 +46,7 @@ var __slice = [].slice,
           width: "0"
         });
       }
-      this.dragger = this.createDivElement("dragger");
+      this.dragger = this.createDivElement(this.settings.draggerClass);
       this.slider.css({
         minHeight: this.dragger.outerHeight(),
         marginLeft: this.dragger.outerWidth() / 2,
@@ -299,6 +299,13 @@ var __slice = [].slice,
         trigger: trigger,
         el: this.slider
       };
+      if( this.settings.target ){
+        if( this.settings.target.is('input') ){
+          this.settings.target.val( value );
+        }else{
+          this.settings.target.text( value );
+        }
+      }
       return this.input.val(value).trigger($.Event("change", eventData)).trigger("slider:changed", eventData);
     };
 
@@ -339,6 +346,10 @@ var __slice = [].slice,
           }
           return _results;
         })();
+      }
+      settings.draggerClass = ( $el.data("slider-dragger-class") ? $el.data("slider-dragger-class") : "dragger" );
+      if ($el.data("slider-target")) {
+        settings.target = $($el.data("slider-target"));
       }
       if ($el.data("slider-range")) {
         settings.range = $el.data("slider-range").split(",");
