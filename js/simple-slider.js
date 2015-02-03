@@ -42,11 +42,11 @@ var __slice = [].slice,
         width: "100%"
       });
       if (this.settings.highlight) {
-        this.highlightTrack = this.createDivElement("highlight-track").css({
+        this.highlightTrack = this.createDivElement( this.settings.highlight === "true" ? "highlight-track" : this.settings.highlight ).css({
           width: "0"
         });
       }
-      this.dragger = this.createDivElement("dragger");
+      this.dragger = this.createDivElement( this.settings.dragger ? this.settings.dragger : "dragger" );
       this.slider.css({
         minHeight: this.dragger.outerHeight(),
         marginLeft: this.dragger.outerWidth() / 2,
@@ -299,6 +299,13 @@ var __slice = [].slice,
         trigger: trigger,
         el: this.slider
       };
+      if( this.settings.target ){
+        if( this.settings.target.is('input') ){
+          this.settings.target.val( value );
+        }else{
+          this.settings.target.text( value );
+        }
+      }
       return this.input.val(value).trigger($.Event("change", eventData)).trigger("slider:changed", eventData);
     };
 
@@ -340,6 +347,12 @@ var __slice = [].slice,
           return _results;
         })();
       }
+      if ( $el.data("slider-dragger") ){
+        settings.dragger = $el.data("slider-dragger");
+      }
+      if ($el.data("slider-target")) {
+        settings.target = $($el.data("slider-target"));
+      }
       if ($el.data("slider-range")) {
         settings.range = $el.data("slider-range").split(",");
       }
@@ -351,7 +364,7 @@ var __slice = [].slice,
       if ($el.data("slider-theme")) {
         settings.theme = $el.data("slider-theme");
       }
-      if ($el.attr("data-slider-highlight")) {
+      if ($el.data("slider-highlight")) {       
         settings.highlight = $el.data("slider-highlight");
       }
       if ($el.data("slider-animate") != null) {
